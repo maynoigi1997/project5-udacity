@@ -200,8 +200,8 @@ functions:
       - websocket:
           route: $disconnect
     iamRoleStatements:
-       - Effect: Allow
-         Action:
+      - Effect: Allow
+        Action:
           - dynamodb:Scan
           - dynamodb:PutItem
           - dynamodb:DeleteItem
