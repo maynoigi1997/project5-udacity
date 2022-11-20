@@ -31,8 +31,12 @@ async function processS3Event(s3Event: S3Event) {
     const key = record.s3.object.key
     console.log('Processing S3 item with key: ', key)
 
-    const connections = await docClient.scan({
-        TableName: connectionsTable
+    const connections = await docClient.query({
+        TableName: connectionsTable,
+        KeyConditionExpression: 'isConnect = :isConnect',
+        ExpressionAttributeValues: {
+            ':isConnect': 'true'
+        }
     }).promise()
 
     const payload = {

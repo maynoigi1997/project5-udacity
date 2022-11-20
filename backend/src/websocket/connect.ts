@@ -7,18 +7,22 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 const connectionsTable = process.env.CONNECTIONS_TABLE
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  console.log('Websocket disconnect', event)
+  console.log('Websocket connect', event)
 
   const connectionId = event.requestContext.connectionId
-  const key = {
-      id: connectionId
+  const timestamp = new Date().toISOString()
+
+  const item = {
+    isConnect: 'true',
+    id: connectionId,
+    timestamp
   }
 
-  console.log('Removing item with key: ', key)
+  console.log('Storing item: ', item)
 
-  await docClient.delete({
+  await docClient.put({
     TableName: connectionsTable,
-    Key: key
+    Item: item
   }).promise()
 
   return {
